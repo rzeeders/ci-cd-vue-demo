@@ -1,0 +1,27 @@
+name: Deploy to Pages
+on: 
+  push:
+    branches: [master]
+jobs:
+  build_vue:
+    runs-on: ubuntu-latest
+    name: Build & Deploy Vue
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.20.3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          cache: 'pnpm'
+      - name: Build
+        run: |
+          pnpm install
+          pnpm run build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.6
+        with:
+          branch: gh-pages
+          folder: dist
